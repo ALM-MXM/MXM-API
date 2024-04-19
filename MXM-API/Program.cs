@@ -10,6 +10,20 @@ builder.Services.AddInfrastructure();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//CORS CONFIGURATION
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        string[] origins = {"http://localhost:4200"};
+        builder.
+         WithOrigins(origins)
+         .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials(); ;
+    });
+});
 
 
 var app = builder.Build();
@@ -24,6 +38,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

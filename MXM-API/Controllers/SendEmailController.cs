@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Validators.ExtensionValidators;
-using System.Net.Mime;
 
 
 namespace MXM_API.Controllers

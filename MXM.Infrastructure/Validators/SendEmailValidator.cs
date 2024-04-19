@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Validators.ExtensionValidators;
-using System.Text.RegularExpressions;
-
 
 namespace MXM.Infrastructure.Validators
 {
