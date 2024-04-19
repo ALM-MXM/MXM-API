@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MXM.Entities\MXM.Entities.csproj" />
+    <ProjectReference Include="..\MXM.Infrastructure\MXM.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
