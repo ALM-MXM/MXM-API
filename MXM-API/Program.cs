@@ -10,6 +10,7 @@ builder.Services.AddInfrastructure();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 //CORS CONFIGURATION
 builder.Services.AddCors(options =>
 {

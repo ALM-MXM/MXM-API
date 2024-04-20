@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using MXM.Entities.Models;
+using MXM.Infrastructure.Messaging.Contracts;
+using MXM.Infrastructure.Messaging.Services;
 using MXM.Infrastructure.Validators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MXM.Infrastructure
 {
@@ -15,12 +13,18 @@ namespace MXM.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.ValidatorModule();
+            services.RabbitMQMessageSevices();
             return services;
         }
 
         public static IServiceCollection ValidatorModule(this IServiceCollection services)
         {
             services.AddScoped<IValidator<SendEmail>, SendEmailValidator>();
+            return services;
+        }
+        public static IServiceCollection RabbitMQMessageSevices(this IServiceCollection services)
+        {
+            services.AddScoped<IRabbitMQRepository, RabbitMQServices>();
             return services;
         }
     }
