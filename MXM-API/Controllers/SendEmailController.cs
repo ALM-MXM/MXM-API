@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Messaging.Contracts;
@@ -20,7 +21,7 @@ namespace MXM_API.Controllers
             _rabbitMQRepository = rabbitMQRepository;
         }
 
-        [HttpPost]
+        [HttpPost]        
         public async Task<IActionResult> SendEmail([FromBody] SendEmail sendEmail)
         {
             try
@@ -28,14 +29,14 @@ namespace MXM_API.Controllers
                 var result = await _validatorSendEmail.ValidateAsync(sendEmail);
                 if (!result.IsValid)
                     return BadRequest(new { Errors = result.Errors.CustomValidatorFailures() });
-                var resultAddEmailInQueue = _rabbitMQRepository.Publisher(sendEmail, sendEmailRoutingKey);
+                var resultAddEmailInQueue = await _rabbitMQRepository.Publisher(sendEmail, sendEmailRoutingKey);
                 if (resultAddEmailInQueue)
                     return Ok(new { StatusCode = 200, Message = "E-mail enviado com sucesso" });
                 return BadRequest(new { StatusCode = 400, Message = "E-mail não enviado" });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message} " });
+                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message}" });
             }
         }
     }

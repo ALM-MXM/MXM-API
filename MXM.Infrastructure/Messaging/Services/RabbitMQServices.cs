@@ -32,7 +32,7 @@ namespace MXM.Infrastructure.Messaging.Services
             _channel = _connection.CreateModel();
         }
 
-        public bool Publisher(object data, string routingKey)
+        public async Task<bool> Publisher(object data, string routingKey)
         {
             try
             {
