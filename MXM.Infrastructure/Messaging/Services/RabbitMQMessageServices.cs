@@ -4,32 +4,18 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
 
+
 namespace MXM.Infrastructure.Messaging.Services
 {
-    internal class RabbitMQServices : IRabbitMQRepository
+    internal class RabbitMQMessageServices : IRabbitMQMessageRepository
     {
-        private readonly IConnection _connection;
-        private readonly IModel _channel;
-        private readonly IConfiguration _configuration;
-        public RabbitMQServices(IConfiguration configuration)
-        {
-            _configuration = configuration;
-            var factory = new ConnectionFactory()
-            {
-                UserName = _configuration["ConnectRabbitMQServices:UserName"],
-                Password = _configuration["ConnectRabbitMQServices:Password"],
-                HostName = _configuration["ConnectRabbitMQServices:HostName"],
-                VirtualHost = _configuration["ConnectRabbitMQServices:VirtualHost"],
-                Port = int.Parse(_configuration["ConnectRabbitMQServices:Port"])
-            };
+        private IModel _channel;
+        private readonly IRabbitMQConnectionRepository _connectionRepository;
 
-            //Caso o servidor Online não funcionar 
-            //var factory = new ConnectionFactory()
-            //{              
-            //    HostName = "localhost",               
-            //};
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
+        public RabbitMQMessageServices(IConfiguration configuration, IRabbitMQConnectionRepository rabbitMQConnectionRepository)
+        {
+            _connectionRepository = rabbitMQConnectionRepository;
+            _channel = _connectionRepository.GetConnection();
         }
 
         public async Task<bool> Publisher(object data, string routingKey)
@@ -54,13 +40,14 @@ namespace MXM.Infrastructure.Messaging.Services
                     );
                 if (_channel.WaitForConfirms(TimeSpan.FromSeconds(10)))
                     return true;
-                
-                return false;                
+
+                return false;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
         }
+       
     }
 }

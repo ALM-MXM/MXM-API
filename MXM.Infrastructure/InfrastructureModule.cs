@@ -13,19 +13,21 @@ namespace MXM.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.ValidatorModule();
-            services.RabbitMQMessageSevices();
+            services.RabbitMQMessageSevices();           
             return services;
         }
 
-        public static IServiceCollection ValidatorModule(this IServiceCollection services)
+        private static IServiceCollection ValidatorModule(this IServiceCollection services)
         {
             services.AddScoped<IValidator<SendEmail>, SendEmailValidator>();
             return services;
         }
-        public static IServiceCollection RabbitMQMessageSevices(this IServiceCollection services)
+        private static IServiceCollection RabbitMQMessageSevices(this IServiceCollection services)
         {
-            services.AddScoped<IRabbitMQRepository, RabbitMQServices>();
+            services.AddScoped<IRabbitMQMessageRepository, RabbitMQMessageServices>();
+            services.AddSingleton<IRabbitMQConnectionRepository, RabbitMQConnectionServices>();
             return services;
         }
+                
     }
 }
