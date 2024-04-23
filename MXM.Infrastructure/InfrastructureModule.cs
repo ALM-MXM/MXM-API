@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MXM.Entities.DTOs.ApplicationUserDTOs;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Data;
 using MXM.Infrastructure.Messaging.Contracts;
@@ -34,6 +35,7 @@ namespace MXM.Infrastructure
         private static IServiceCollection ValidatorModule(this IServiceCollection services)
         {
             services.AddScoped<IValidator<SendEmail>, SendEmailValidator>();
+            services.AddScoped<IValidator<ApplicationUserCreatedDTO>, ApplicationUserCreateValidator>();
             return services;
         }
         private static IServiceCollection RabbitMQMessageSevices(this IServiceCollection services)

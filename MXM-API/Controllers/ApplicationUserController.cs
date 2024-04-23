@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using MXM.Entities.DTOs.ApplicationUserDTOs;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Repositories.Contracts;
+using MXM.Infrastructure.Validators.ExtensionValidators;
 
 namespace MXM_API.Controllers
 {
@@ -10,16 +12,18 @@ namespace MXM_API.Controllers
     public class ApplicationUserController:ControllerBase
     {
         private readonly IApplicationUserRepository _userRepository;
-        public ApplicationUserController(IApplicationUserRepository applicationUserRepository)
+        private readonly IValidator<ApplicationUserCreatedDTO> _userValidator;
+        public ApplicationUserController(IValidator<ApplicationUserCreatedDTO> userValidator, IApplicationUserRepository applicationUserRepository)
         {
+            _userValidator = userValidator;
             _userRepository = applicationUserRepository;
         }
 
         [HttpPost("created")]
         public async Task<IActionResult> CreatedApplicationUser([FromBody] ApplicationUserCreatedDTO applicationUserCreatedDTO)
         {
-
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+            var userValidatorResult = await _userValidator.ValidateAsync(applicationUserCreatedDTO);
+            if(!userValidatorResult.IsValid) return BadRequest( new {errors = userValidatorResult.Errors.CustomValidatorFailures() });
             var applicationUserCreated = new ApplicationUser()
             {
                 FirstName = applicationUserCreatedDTO.FirstName,
