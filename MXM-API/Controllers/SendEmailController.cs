@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Messaging.Contracts;
+using MXM.Infrastructure.Repositories.Contracts;
 using MXM.Infrastructure.Validators.ExtensionValidators;
 using MXM_API.Extensions;
+using System.Text.Json;
 
 
 namespace MXM_API.Controllers
@@ -16,14 +18,17 @@ namespace MXM_API.Controllers
         private readonly IRabbitMQMessageRepository _rabbitMQRepository;
         const string sendEmailRoutingKey = "queueSendEmails";
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ILogRepository _logRepository;
         public SendEmailController(
             IValidator<SendEmail> validatorSendEmail,
             IRabbitMQMessageRepository rabbitMQRepository,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor
+            ,ILogRepository logRepository)
         {
             _validatorSendEmail = validatorSendEmail;
             _rabbitMQRepository = rabbitMQRepository;
             _contextAccessor = contextAccessor;
+            _logRepository = logRepository;
         }
 
         [HttpPost]        
@@ -38,6 +43,8 @@ namespace MXM_API.Controllers
                 if (resultAddEmailInQueue)
                 {   //TODO - Salvar Log do envio no MongoDB
                     var clientIpAdress = GetClientIPAdress.GetClientIPAddress(_contextAccessor.HttpContext);
+                    var log = new SendEmailLog() { IpAdressClientRequest = clientIpAdress, DateCreated = DateTime.Now,Content = JsonSerializer.Serialize(sendEmail)};
+                    await _logRepository.CreatedLogSendEmail(log);
                     return Ok(new { StatusCode = 200, Message = "E-mail enviado com sucesso" });                   
                 }                    
                 return BadRequest(new { StatusCode = 400, Message = "E-mail não enviado" });
