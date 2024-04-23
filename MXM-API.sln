@@ -5,6 +5,10 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MXM-API", "MXM-API\MXM-API.csproj", "{9D2EBC13-4DF3-49D7-BA81-E643DFCFC11E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MXM.Entities", "MXM.Entities\MXM.Entities.csproj", "{103C5DBB-3C91-40C6-870F-DBCE200BE49C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MXM.Infrastructure", "MXM.Infrastructure\MXM.Infrastructure.csproj", "{63664071-EE72-4282-8B0A-4431414DE186}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{9D2EBC13-4DF3-49D7-BA81-E643DFCFC11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D2EBC13-4DF3-49D7-BA81-E643DFCFC11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D2EBC13-4DF3-49D7-BA81-E643DFCFC11E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{103C5DBB-3C91-40C6-870F-DBCE200BE49C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{103C5DBB-3C91-40C6-870F-DBCE200BE49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{103C5DBB-3C91-40C6-870F-DBCE200BE49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{103C5DBB-3C91-40C6-870F-DBCE200BE49C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63664071-EE72-4282-8B0A-4431414DE186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63664071-EE72-4282-8B0A-4431414DE186}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63664071-EE72-4282-8B0A-4431414DE186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63664071-EE72-4282-8B0A-4431414DE186}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
