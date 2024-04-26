@@ -15,12 +15,10 @@ namespace MXM_API.Controllers
         [HttpGet("period")]
         public async Task<IActionResult> GetLogSendEmailPeriod(string dateInitial, string dateFinal)
         {
-
             var dateInitialFormating = DateTime.Parse(dateInitial);
             var dateFinalFormating = DateTime.Parse(dateFinal).AddDays(1).AddTicks(-1);
             var listLogsAnalyse =  await _logRepository.GetLogSendEmailPeriod(dateInitialFormating, dateFinalFormating);
             return Ok(listLogsAnalyse);
-
         }
     }
 }

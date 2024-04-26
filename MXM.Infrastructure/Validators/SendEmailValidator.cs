@@ -8,7 +8,7 @@ namespace MXM.Infrastructure.Validators
     {
         public SendEmailValidator()
         {
-            RuleFor(e => e.Name)
+            RuleFor(e => e.Nome)
                 .NotEmpty()
                 .WithMessage("Nome precisa ser preenchido")
                 .MinimumLength(3)
@@ -16,7 +16,7 @@ namespace MXM.Infrastructure.Validators
                 .Must(fr => fr.ValidateContentWordsInaproprieted())
                 .WithMessage("O nome Fornecido contém palavras inapropriadas");
 
-            RuleFor(e => e.AdressDestination)
+            RuleFor(e => e.EnderecoDestino)
                 .NotEmpty()
                 .WithMessage("O E-mail não pode ser vazio")
                 .EmailAddress()
@@ -24,7 +24,7 @@ namespace MXM.Infrastructure.Validators
                 .Must(fr => fr.ValidateContentWordsInaproprieted())
                 .WithMessage("O E-mail fornecido contém palavras inapropriadas");
 
-            RuleFor(e => e.Body)
+            RuleFor(e => e.Corpo)
                 .NotEmpty()
                 .WithMessage("Mensagem precisa ser preenchida")
                 .Must(e => e.ValidateEmailBodyIsHtml())

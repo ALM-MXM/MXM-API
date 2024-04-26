@@ -7,32 +7,40 @@ namespace MXM_API.Extensions
 
         public static string GetClientIPAddress(HttpContext httpContext)
         {
-
-            string forwardedHeader = httpContext.Request.Headers["X-Forwarded-For"];
-            if (!string.IsNullOrEmpty(forwardedHeader))
-                return forwardedHeader.Split(',', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim();
-            var clientAddresIp = httpContext.Connection.RemoteIpAddress.ToString();
-
-            if (clientAddresIp.Trim() == "::1")
+            try
             {
-                string hostName = Dns.GetHostName();
-                IPHostEntry iPHostEntry = Dns.GetHostEntry(hostName);
-                IPAddress[] arrIpAdress = iPHostEntry.AddressList;
-                try
-                {
-                    foreach (IPAddress ipAddress in arrIpAdress)
-                    {
-                        if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                            forwardedHeader = ipAddress.ToString();
-                    }
+                string forwardedHeader = httpContext.Request.Headers["X-Forwarded-For"]!;
+                if (!string.IsNullOrEmpty(forwardedHeader))
+                    return forwardedHeader.Split(',', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim()!;
+                var clientAddresIp = httpContext.Connection.RemoteIpAddress!.ToString();
 
-                }
-                catch (Exception ex)
+                if (clientAddresIp.Trim() == "::1")
                 {
-                    throw new Exception(ex.Message);
+                    string hostName = Dns.GetHostName();
+                    IPHostEntry iPHostEntry = Dns.GetHostEntry(hostName);
+                    IPAddress[] arrIpAdress = iPHostEntry.AddressList;
+                    try
+                    {
+                        foreach (IPAddress ipAddress in arrIpAdress)
+                        {
+                            if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                                forwardedHeader = ipAddress.ToString();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
                 }
+                return forwardedHeader;
+
             }
-            return forwardedHeader;
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex.Message}", ex);   
+            }
+
         }
     }
 }

@@ -14,10 +14,10 @@ namespace MXM_API.Controllers
         }
 
         [HttpPost("auth")]
-        public async Task<IActionResult> AuthApplicationUser([FromBody]ApplicationUserAuthDTO applicationUserAuthDTO)
+        public async Task<IActionResult> AuthApplicationUser([FromBody]AutenticacaoUsuarioDTO applicationUserAuthDTO)
         {
            if(!ModelState.IsValid)return BadRequest(ModelState);
-            var userLoggedResult = await _authRepository.AuthApplicationUser(applicationUserAuthDTO.Email, applicationUserAuthDTO.Password);
+            var userLoggedResult = await _authRepository.AuthApplicationUser(applicationUserAuthDTO.Email, applicationUserAuthDTO.Senha);
             if (userLoggedResult != null)
                 return Ok(userLoggedResult);
             return NotFound("Usuario Não Encontrado");

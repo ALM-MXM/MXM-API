@@ -12,17 +12,23 @@ namespace MXM.Infrastructure.Messaging.Services
         private IModel _channel;
         private readonly IRabbitMQConnectionRepository _connectionRepository;
 
-        public RabbitMQMessageServices(IConfiguration configuration, IRabbitMQConnectionRepository rabbitMQConnectionRepository)
+        public RabbitMQMessageServices(IRabbitMQConnectionRepository rabbitMQConnectionRepository)
         {
-            _connectionRepository = rabbitMQConnectionRepository;
-            _channel = _connectionRepository.GetConnection();
+            try
+            {
+                _connectionRepository = rabbitMQConnectionRepository;
+                _channel = _connectionRepository.GetConnection();
+            }catch (Exception ex)
+            {
+              throw new Exception(ex.Message);
+            }            
         }
 
         public async Task<bool> Publisher(object data, string routingKey)
         {
             try
             {
-                var body = JsonConvert.SerializeObject(data);
+                var body =  JsonConvert.SerializeObject(data);
                 var bodyByteArray = Encoding.UTF8.GetBytes(body);
                 _channel.QueueDeclare(
                     queue: $"{routingKey}",
@@ -38,7 +44,7 @@ namespace MXM.Infrastructure.Messaging.Services
                     null,
                     bodyByteArray
                     );
-                if (_channel.WaitForConfirms(TimeSpan.FromSeconds(10)))
+                if ( _channel.WaitForConfirms(TimeSpan.FromSeconds(10)))
                     return true;
 
                 return false;

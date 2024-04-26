@@ -39,13 +39,12 @@ builder.Services.AddSwaggerGen(options =>
 //Add HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-
 //CORS CONFIGURATION
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        string[] origins = { "http://localhost:4200" };
+        string[] origins = { "http://localhost:4200"};
         builder.
          WithOrigins(origins)
          .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE")
@@ -54,7 +53,6 @@ builder.Services.AddCors(options =>
         .AllowCredentials(); ;
     });
 });
-
 
 var app = builder.Build();
 
@@ -66,6 +64,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//app.UseHsts();
 
 app.UseAuthentication();
 

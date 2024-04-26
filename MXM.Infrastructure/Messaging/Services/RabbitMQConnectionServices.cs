@@ -4,7 +4,7 @@ using RabbitMQ.Client;
 
 namespace MXM.Infrastructure.Messaging.Services
 {
-    internal class RabbitMQConnectionServices : IRabbitMQConnectionRepository , IDisposable
+    internal class RabbitMQConnectionServices : IRabbitMQConnectionRepository, IDisposable
     {
         private IConnection _connection;
         private readonly ConnectionFactory _connectionFactory;
@@ -13,6 +13,7 @@ namespace MXM.Infrastructure.Messaging.Services
 
         public RabbitMQConnectionServices(IConfiguration configuration)
         {
+
             _configuration = configuration;
             _connectionFactory = new ConnectionFactory()
             {
@@ -26,12 +27,20 @@ namespace MXM.Infrastructure.Messaging.Services
 
         public IModel GetConnection()
         {
-            if (_connection == null || !_connection.IsOpen)
+            try
             {
-                _connection = _connectionFactory.CreateConnection();
-                _channel = _connection.CreateModel();
+                if (_connection == null || !_connection.IsOpen)
+                {
+                    _connection = _connectionFactory.CreateConnection();
+                    _channel = _connection.CreateModel();
+                }
+                return _channel;
             }
-            return _channel;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
         }
         public void Dispose()
         {
