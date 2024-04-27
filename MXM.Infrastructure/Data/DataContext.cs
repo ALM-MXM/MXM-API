@@ -20,7 +20,8 @@ namespace MXM.Infrastructure.Data
                 .HasKey(e => e.LogId);
             builder.Entity<SendEmailLog>()
                 .Property(e => e.LogId)
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedOnAdd();   
+            
             base.OnModelCreating(builder);
         }
     }

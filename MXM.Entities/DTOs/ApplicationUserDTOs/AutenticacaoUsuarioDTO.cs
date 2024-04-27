@@ -3,12 +3,17 @@
 
 namespace MXM.Entities.DTOs.ApplicationUserDTOs
 {
-    public class ApplicationUserAuthDTO
+    public class AutenticacaoUsuarioDTO
     {
         [Required]
         [EmailAddress]
         public string Email { get; set; } = null!;
         [Required]
-        public string Password { get; set; } = null!;
+        public string Senha { get; set; } = null!;
     }
 }
+
+
+
+
+

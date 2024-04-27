@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MXM.Infrastructure.Repositories.Contracts;
 
 namespace MXM_API.Controllers
@@ -13,14 +14,13 @@ namespace MXM_API.Controllers
             _logRepository = logRepository;
         }
         [HttpGet("period")]
+        [Authorize]
         public async Task<IActionResult> GetLogSendEmailPeriod(string dateInitial, string dateFinal)
         {
-
             var dateInitialFormating = DateTime.Parse(dateInitial);
             var dateFinalFormating = DateTime.Parse(dateFinal).AddDays(1).AddTicks(-1);
             var listLogsAnalyse =  await _logRepository.GetLogSendEmailPeriod(dateInitialFormating, dateFinalFormating);
             return Ok(listLogsAnalyse);
-
         }
     }
 }

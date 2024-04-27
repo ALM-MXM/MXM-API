@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MXM.Entities.DTOs.ApplicationUserDTOs;
 using MXM.Entities.Models;
 using MXM.Infrastructure.Data;
 using MXM.Infrastructure.Repositories.Contracts;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+
 
 namespace MXM.Infrastructure.Repositories.Services
 {
@@ -27,7 +24,7 @@ namespace MXM.Infrastructure.Repositories.Services
             _data = dataContext;
             _configuration = configuration;
         }
-        public async Task<ApplicationUserLoggedDTO> AuthApplicationUser(string email, string password)
+        public async Task<UsuarioLogadoDTO?> AuthApplicationUser(string email, string password)
         {
             var result = await _sigInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
@@ -39,9 +36,9 @@ namespace MXM.Infrastructure.Repositories.Services
                 return null;
             }
         }
-        private async Task<ApplicationUserLoggedDTO> CreatedToken(string applicationUserEmail)
+        private async Task<UsuarioLogadoDTO> CreatedToken(string applicationUserEmail)
         {
-            var applicationLogin = _data.ApplicationUsers.Where(user => user.Email == applicationUserEmail).FirstOrDefault();
+            var applicationLogin = await _data.ApplicationUsers.Where(user => user.Email == applicationUserEmail).FirstOrDefaultAsync();
             if (applicationLogin != null)
             {
                 var claims = new[]
@@ -50,11 +47,11 @@ namespace MXM.Infrastructure.Repositories.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
             };
                 var key = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
+                    Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));
                 var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var expirationGet = _configuration["TokenConfiguration:ExpireHours"];
-                var expiration = DateTime.UtcNow.AddHours(double.Parse(expirationGet));
+                var expiration = DateTime.UtcNow.AddHours(double.Parse(expirationGet!));
 
                 JwtSecurityToken token = new JwtSecurityToken(
                     issuer: _configuration["TokenConfiguration:Issuer"],
@@ -63,11 +60,11 @@ namespace MXM.Infrastructure.Repositories.Services
                 expires: expiration,
                 signingCredentials: credentials
                 );                
-                return new ApplicationUserLoggedDTO()
+                return new UsuarioLogadoDTO()
                 {
                     Id = applicationLogin.Id,
-                    FirstName = applicationLogin.FirstName,
-                    LastName = applicationLogin.LastName,
+                    PrimeiroNome = applicationLogin.FirstName,
+                    UltimoNome = applicationLogin.LastName,
                     Email=applicationLogin.Email,
                     Token = new JwtSecurityTokenHandler().WriteToken(token)  
                 };

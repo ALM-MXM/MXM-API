@@ -9,6 +9,6 @@ namespace MXM.Infrastructure.Repositories.Contracts
 {
     public interface IAuthRepository
     {
-        Task<ApplicationUserLoggedDTO> AuthApplicationUser(string email, string password);       
+        Task<UsuarioLogadoDTO?> AuthApplicationUser(string email, string password);       
     }
 }

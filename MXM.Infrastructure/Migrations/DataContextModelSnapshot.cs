@@ -238,7 +238,7 @@ namespace MXM.Infrastructure.Migrations
 
                     b.HasKey("LogId");
 
-                    b.ToTable("SendEmailLogs");
+                    b.ToTable("SendEmailLogs", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

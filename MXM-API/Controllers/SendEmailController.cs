@@ -12,8 +12,7 @@ using System.Text.Json;
 namespace MXM_API.Controllers
 {
     [Controller]
-    [Route("mxm-api/[controller]")]
-    
+    [Route("api/[controller]")]
     public class SendEmailController : ControllerBase
     {
         private readonly IValidator<SendEmail> _validatorSendEmail;
@@ -25,36 +24,37 @@ namespace MXM_API.Controllers
             IValidator<SendEmail> validatorSendEmail,
             IRabbitMQMessageRepository rabbitMQRepository,
             IHttpContextAccessor contextAccessor
-            ,ILogRepository logRepository)
+            , ILogRepository logRepository)
         {
             _validatorSendEmail = validatorSendEmail;
             _rabbitMQRepository = rabbitMQRepository;
             _contextAccessor = contextAccessor;
             _logRepository = logRepository;
+
         }
 
-        [HttpPost]
+        [HttpPost("send")]
         [Authorize]
         public async Task<IActionResult> SendEmail([FromBody] SendEmail sendEmail)
         {
             try
-            {    
+            {
                 var result = await _validatorSendEmail.ValidateAsync(sendEmail);
                 if (!result.IsValid)
                     return BadRequest(new { Errors = result.Errors.CustomValidatorFailures() });
                 var resultAddEmailInQueue = await _rabbitMQRepository.Publisher(sendEmail, _sendEmailRoutingKey);
                 if (resultAddEmailInQueue)
-                {   //TODO - Salvar Log do envio no MongoDB
-                    var clientIpAdress = GetClientIPAdress.GetClientIPAddress(_contextAccessor.HttpContext);
-                    var log = new SendEmailLog() { IpAdressClientRequest = clientIpAdress, DateCreated = DateTime.Now,Content = JsonSerializer.Serialize(sendEmail)};
+                {
+                    var clientIpAdress = GetClientIPAdress.GetClientIPAddress(_contextAccessor.HttpContext!);
+                    var log = new SendEmailLog() { IpAdressClientRequest = clientIpAdress, DateCreated = DateTime.Now, Content = JsonSerializer.Serialize(sendEmail) };
                     await _logRepository.CreatedLogSendEmail(log);
-                    return Ok(new { StatusCode = 200, Message = "E-mail enviado com sucesso" });                   
-                }                    
+                    return Ok(new { StatusCode = 200, Message = "E-mail enviado com sucesso" });
+                }
                 return BadRequest(new { StatusCode = 400, Message = "E-mail não enviado" });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message}" });
+                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message} , {ex}" });
             }
         }
     }
