@@ -54,7 +54,7 @@ namespace MXM_API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message}" });
+                return BadRequest(new { StatusCode = 400, Message = $"E-mail não enviado: {ex.Message} , {ex}" });
             }
         }
     }

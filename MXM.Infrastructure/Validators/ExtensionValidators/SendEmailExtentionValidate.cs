@@ -7,7 +7,7 @@ namespace MXM.Infrastructure.Validators.ExtensionValidators
     {
         public static bool ValidateEmailBodyIsHtml(this string emailBody)
         {
-            var validateHtmlBody = Regex.IsMatch(emailBody, @"^\s*<(!DOCTYPE\s)?html\b", RegexOptions.IgnoreCase);
+            var validateHtmlBody = Regex.IsMatch(emailBody, @"(?s)(<!DOCTYPE\s+html\b[^>]*>)(?=.*?<head\b[^>]*>)(?=.*?<body\b[^>]*>)", RegexOptions.IgnoreCase);
             if (!validateHtmlBody) return false;
             return true;
         }

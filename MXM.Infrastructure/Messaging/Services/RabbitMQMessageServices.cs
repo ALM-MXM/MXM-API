@@ -44,7 +44,7 @@ namespace MXM.Infrastructure.Messaging.Services
                     null,
                     bodyByteArray
                     );
-                if ( _channel.WaitForConfirms(TimeSpan.FromSeconds(10)))
+                if (_channel.WaitForConfirms(TimeSpan.FromSeconds(10)))
                     return true;
 
                 return false;
