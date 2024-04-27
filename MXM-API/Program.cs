@@ -44,7 +44,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        string[] origins = { "http://localhost:4200", "https://mxm-frontend-luiza.vercel.app" };
+        string[] origins = { "http://localhost:4200", "https://luiza-mxm-frontend.vercel.app" };
         builder.
          WithOrigins(origins)
          .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE")
