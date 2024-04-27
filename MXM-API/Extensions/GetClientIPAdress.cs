@@ -9,38 +9,20 @@ namespace MXM_API.Extensions
         {
             try
             {
-                string forwardedHeader = httpContext.Request.Headers["X-Forwarded-For"]!;
+                string forwardedHeader = httpContext.Request.Headers["X-Forwarded-For"];
                 if (!string.IsNullOrEmpty(forwardedHeader))
-                    return forwardedHeader.Split(',', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim()!;
-                var clientAddresIp = httpContext.Connection.RemoteIpAddress!.ToString();
-
-                if (clientAddresIp.Trim() == "::1")
                 {
-                    string hostName = Dns.GetHostName();
-                    IPHostEntry iPHostEntry = Dns.GetHostEntry(hostName);
-                    IPAddress[] arrIpAdress = iPHostEntry.AddressList;
-                    try
-                    {
-                        foreach (IPAddress ipAddress in arrIpAdress)
-                        {
-                            if (ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                forwardedHeader = ipAddress.ToString();
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
+                    return forwardedHeader.Split(',', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim();
                 }
-                return forwardedHeader;
-
+                else
+                {                   
+                    return httpContext.Connection.RemoteIpAddress?.ToString();
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"{ex.Message}", ex);   
+                throw new Exception($"{ex.Message}", ex);
             }
-
         }
     }
 }
