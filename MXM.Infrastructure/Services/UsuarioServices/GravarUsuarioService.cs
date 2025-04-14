@@ -12,26 +12,26 @@ namespace MXM.Infrastructure.Services.UsuarioServices
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task GravarUsuario(Usuario usuario)
-        {
-            var listaDeUsuario = new List<Usuario>();
+        //public async Task GravarUsuario(Usuario usuario)
+        //{
+        //    var listaDeUsuario = new List<Usuario>();
 
-            for (int i = 0; i < 10000000; i++)
-            {
-                var usuarioDbInsert = new Usuario
-                {
-                    Id = Guid.NewGuid(),
-                    Nome = $"João_{i}",
-                    Sobrenome = $"Silva_{i}",
-                    Email = "email-@email.com",
-                    Telefone = "11999999999",
-                    Password = "senha123@12321",
-                    Ativo = true
-                };
-                listaDeUsuario.Add(usuarioDbInsert);
-            }
-            await _usuarioRepository.DbSet.AddRangeAsync(listaDeUsuario);
-            await _usuarioRepository.DbContext.SaveChangesAsync();
-        }
+        //    for (int i = 0; i < 10000000; i++)
+        //    {
+        //        var usuarioDbInsert = new Usuario
+        //        {
+        //            Id = Guid.NewGuid().ToString(),
+        //            Nome = $"João_{i}",
+        //            Sobrenome = $"Silva_{i}",
+        //            Email = "email-@email.com",
+        //            Telefone = "11999999999",
+        //            Password = "senha123@12321",
+        //            Ativo = true
+        //        };
+        //        listaDeUsuario.Add(usuarioDbInsert);
+        //    }
+        //    await _usuarioRepository.DbSet.AddRangeAsync(listaDeUsuario);
+        //    await _usuarioRepository.DbContext.SaveChangesAsync();
+        //}
     }
 }

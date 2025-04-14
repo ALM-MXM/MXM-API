@@ -6,15 +6,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MXM.Infrastructure.Data.ContextConfig;
 using MXM.Infrastructure.Repositories.UsuarioRepository;
+using MXM.Infrastructure.Services.ReturnPadraoServices;
 using MXM.Infrastructure.Services.UsuarioServices;
 using System.Text;
 
 
 namespace MXM.Infrastructure
 {
-    public static class InfrastructureModule
+    public static class InfraServicesModule
     {
-
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.DbContextModule(configuration);
@@ -40,7 +40,13 @@ namespace MXM.Infrastructure
 
         private static IServiceCollection ServicesModule(this IServiceCollection services)
         {
+            services.AddScoped(typeof(ServicoDeMensagem));
+            services.AddScoped(typeof(ServicoRetornoPadrao));
+
             services.AddScoped(typeof(GravarUsuarioService));
+            services.AddScoped(typeof(ObterUsuarioService));
+
+
             return services;
         }
 

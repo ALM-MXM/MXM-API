@@ -10,7 +10,7 @@ namespace MXM.Entities.Models
     public class Usuario
     {
         private string _senhaHash = string.Empty; 
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Nome { get; set; } = string.Empty!;
         public string Sobrenome { get; set; } = string.Empty!;
         public string Telefone { get; set; } = string.Empty!;
